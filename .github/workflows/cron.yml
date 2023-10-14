@@ -12,6 +12,15 @@ jobs:
     runs-on: ubuntu-latest
     if: github.repository == 'pypi-data/pypi-json-data'
     steps:
+      - name: Maximize build space
+        uses: easimon/maximize-build-space@master
+        with:
+          root-reserve-mb: 512
+          swap-size-mb: 1024
+          remove-dotnet: 'true'
+          remove-codeql: 'true'
+          remove-docker-images: 'true'
+          remove-android: 'true'
       - uses: actions/checkout@v3
         with:
           ref: ${{ github.ref }}
