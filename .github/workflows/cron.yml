@@ -39,7 +39,7 @@ jobs:
             ${{ runner.os }}-request-cache-
 
       - run: poetry install
-      - run: poetry run pypi_data_downloader download-releases release_data/ --limit=1000 --concurrency=20
+      - run: poetry run pypi_data_downloader download-releases release_data/ --limit=3000 --concurrency=20
 
       - uses: EndBug/add-and-commit@v9
         with:
