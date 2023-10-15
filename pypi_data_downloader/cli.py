@@ -10,10 +10,9 @@ from typing import Dict
 import backoff
 import click
 import tqdm
-from requests import RequestException
-from requests_cache import CachedSession
+from requests import RequestException, Session
 
-session = CachedSession('pypi_data_cache', backend='filesystem', serializer='pickle', use_cache_dir=True)
+session = Session()
 session.headers.update({"User-Agent": "pypi-data (https://github.com/orf/pypi-data)"})
 
 
