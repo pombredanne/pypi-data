@@ -30,13 +30,6 @@ jobs:
         with:
           python-version: "3.10"
           cache: "poetry"
-      - name: Cache requests
-        uses: actions/cache@v3
-        with:
-          path: ~/.cache/pypi_data_cache
-          key: ${{ runner.os }}-request-cache-${{ github.run_id }}
-          restore-keys: |
-            ${{ runner.os }}-request-cache-
 
       - run: poetry install
       - run: poetry run pypi_data_downloader download-releases release_data/ --limit=1000 --concurrency=20
