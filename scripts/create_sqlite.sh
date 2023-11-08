@@ -39,4 +39,4 @@ EOF
 
 echo "Compressing..."
 
-gzip -9 pypi-data.sqlite
+gzip -6 pypi-data.sqlite
