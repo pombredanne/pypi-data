@@ -14,6 +14,8 @@ jobs:
     name: Bundle Data
     runs-on: ubuntu-latest
     if: github.repository == 'pypi-data/pypi-json-data'
+    env:
+      sqlite_version: "3440000"
     steps:
       - name: Install tools
         shell: bash
@@ -28,12 +30,12 @@ jobs:
         uses: actions/cache@v3
         with:
           path: /usr/local/bin/sqlite3
-          key: ${{ runner.os }}-sqlite
+          key: ${{ runner.os }}-sqlite-${{ env.sqlite_version }}
 
       - name: Setup sqlite
         if: ${{ steps.cache-sqlite.outputs.cache-hit != 'true' }}
         run: |
-          wget https://www.sqlite.org/2023/sqlite-autoconf-3410000.tar.gz -O sqlite.tar.gz
+          wget https://www.sqlite.org/2023/sqlite-autoconf-${{ env.sqlite_version }}.tar.gz -O sqlite.tar.gz
 
           mkdir sqlite/
           tar xf sqlite.tar.gz --strip-components=1 --directory=sqlite/
