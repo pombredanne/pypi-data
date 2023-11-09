@@ -23,7 +23,7 @@ jobs:
           set -euo pipefail
           IFS=$'\n\t'
 
-          sudo apt install -y jq sqlite3 curl tar gzip pv wget build-essential
+          sudo apt install -y jq sqlite3 curl tar pv wget build-essential libdeflate-tools
       
       - name: Cache Sqlite
         id: cache-sqlite
@@ -49,7 +49,7 @@ jobs:
         run: |
           curl -L -sS https://github.com/pypi-data/pypi-json-data/archive/${{ github.sha }}.tar.gz |
             tar -xOzf - --wildcards '*/release_data/*/*.json' |
-            jq -rc 'values[]' | pv -c -f -i5 -l | gzip > all_data.txt.gz;
+            jq -rc 'values[]' | pv -c -f -i5 -l | libdeflate-gzip -1 > all_data.txt.gz;
 
       - run: |
           mkdir scripts/

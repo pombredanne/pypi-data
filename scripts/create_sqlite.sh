@@ -15,12 +15,12 @@ mkfifo "$projects_fifo"
 mkfifo "$urls_fifo"
 
 echo "Creating projects"
-pv -N projects -c -f -i5 all_data.txt.gz | gzip -d | jq -R -r '. | fromjson | [input_line_number, .info.name, .info.version, .info.author, .info.author_email, .info.home_page,
+pv -N projects -c -f -i5 all_data.txt.gz | libdeflate-gzip -d | jq -R -r '. | fromjson | [input_line_number, .info.name, .info.version, .info.author, .info.author_email, .info.home_page,
                                     .info.license, .info.maintainer, .info.maintainer_email, .info.package_url,
                                     .info.platform, .info.project_url, .info.requires_python, .info.summary, if .info.yanked then 1 else 0 end, .info.yanked_reason, (.info.classifiers | tojson), (.info.requires_dist | tojson)] | @csv' > "$projects_fifo" &
 
 echo "Creating urls"
-pv -N urls -c -f -i5 all_data.txt.gz | gzip -d | jq -R -r '. | fromjson | .urls[] | [input_line_number, .url, .upload_time_iso_8601, .packagetype, .python_version, .requires_python, .size,
+pv -N urls -c -f -i5 all_data.txt.gz | libdeflate-gzip -d | jq -R -r '. | fromjson | .urls[] | [input_line_number, .url, .upload_time_iso_8601, .packagetype, .python_version, .requires_python, .size,
                                                                  if .yanked then 1 else 0 end, .yanked_reason] | @csv' > "$urls_fifo" &
 
 sqlite3 -csv <<EOF
@@ -39,4 +39,4 @@ EOF
 
 echo "Compressing..."
 
-gzip -1 pypi-data.sqlite
+libdeflate-gzip -1 pypi-data.sqlite
