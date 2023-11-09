@@ -47,7 +47,7 @@ jobs:
       - name: Create
         shell: bash
         run: |
-          wget https://github.com/pypi-data/pypi-json-data/archive/${{ github.sha }}.tar.gz -O pypi-data.tar.gz
+          wget --progress=dot:giga https://github.com/pypi-data/pypi-json-data/archive/${{ github.sha }}.tar.gz -O pypi-data.tar.gz
           
           tar -I libdeflate-gzip -xOf pypi-data.tar.gz --wildcards '*/release_data/*/*.json' |
             jq -rc 'values[]' | pv -c -f -i5 -l | libdeflate-gzip -1 > all_data.txt.gz;
