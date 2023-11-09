@@ -40,7 +40,10 @@ def sqlite_to_parquet(sqlite_file, output_file):
                 compression='snappy',
             )
     print('Merging...')
-    pl.scan_parquet(f'{temp_dir_path}/*.parquet', cache=False).sink_parquet(output_file, compression='zstd')
+    pl.scan_parquet(f'{temp_dir_path}/*.parquet', cache=False).sink_parquet(
+        output_file, compression='zstd', statistics=True,
+        row_group_size=50_000
+    )
     print('Merged')
 
 
