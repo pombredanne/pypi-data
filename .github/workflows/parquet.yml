@@ -28,7 +28,7 @@ jobs:
         with:
           python-version: "3.10"
 
-      - run: pip install "polars[pyarrow]" tqdm
+      - run: pip install "polars[pyarrow]" tqdm click
       - run: wget https://raw.githubusercontent.com/pypi-data/pypi-json-data/main/pypi_data_downloader/parquet.py
       - run: wget --progress=dot:giga https://github.com/pypi-data/pypi-json-data/releases/download/latest/pypi-data.sqlite.gz
       - run: libdeflate-gzip -d pypi-data.sqlite.gz
