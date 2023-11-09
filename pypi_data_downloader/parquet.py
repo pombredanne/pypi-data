@@ -18,7 +18,6 @@ def sqlite_to_parquet(sqlite_file, output_file):
             '''
             select
                 project.*,
-                url.project_id,
                 url.url,
                 url.upload_time,
                 url.package_type,
