@@ -32,4 +32,13 @@ jobs:
       - run: wget https://raw.githubusercontent.com/pypi-data/pypi-json-data/main/pypi_data_downloader/parquet.py
       - run: wget --progress=dot:giga https://github.com/pypi-data/pypi-json-data/releases/download/latest/pypi-data.sqlite.gz
       - run: libdeflate-gzip -d pypi-data.sqlite.gz
-      - run: python parquet.py pypi-data.sqlite index.parquet
+      - run: python parquet.py pypi-data.sqlite pypi-data.parquet
+
+      - name: Publish
+        uses: softprops/action-gh-release@v1
+        with:
+          draft: false
+          name: "Latest Release"
+          tag_name: "latest"
+          target_commitish: "empty"
+          files: 'pypi-data.parquet'
