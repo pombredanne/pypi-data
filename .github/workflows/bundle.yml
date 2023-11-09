@@ -48,7 +48,7 @@ jobs:
         shell: bash
         run: |
           curl -L -sS https://github.com/pypi-data/pypi-json-data/archive/${{ github.sha }}.tar.gz |
-            tar -xOzf - --wildcards '*/release_data/*/*.json' |
+            tar -I libdeflate-gzip -xOf - --wildcards '*/release_data/*/*.json' |
             jq -rc 'values[]' | pv -c -f -i5 -l | libdeflate-gzip -1 > all_data.txt.gz;
 
       - run: |
