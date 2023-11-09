@@ -1,0 +1,35 @@
+name: Create Parquet
+on:
+  workflow_dispatch:
+
+#  schedule:
+#    - cron: '0 */6 * * *'
+
+concurrency: ci-parquet-${{ github.ref }}
+
+permissions:
+  contents: write
+
+jobs:
+  create-parquet:
+    name: Create parquet
+    runs-on: ubuntu-latest
+    if: github.repository == 'pypi-data/pypi-json-data'
+    steps:
+      - name: Install tools
+        shell: bash
+        run: |
+          set -euo pipefail
+          IFS=$'\n\t'
+          
+          sudo apt install -y wget libdeflate-tools
+
+      - uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+          cache: "pip"
+      - run: pip install "polars[pyarrow]" tqdm
+      - run: wget https://raw.githubusercontent.com/pypi-data/pypi-json-data/main/pypi_data_downloader/parquet.py
+      - run: wget --progress=dot:giga https://github.com/pypi-data/pypi-json-data/releases/download/latest/pypi-data.sqlite.gz
+      - run: libdeflate-gzip -d pypi-data.sqlite.gz
+      - run: python parquet.py pypi-data.sqlite index.parquet
