@@ -35,9 +35,10 @@ def sqlite_to_parquet(sqlite_file, output_file):
             batch_size=500_000
         )
         for idx, item in enumerate(tqdm.tqdm(items)):
+            print(f"Writing batch {idx}")
             item.write_parquet(
                 str(temp_dir_path / f'{idx}.parquet'),
-                compression='snappy',
+                compression='zstd',
             )
     print('Merging...')
     pl.scan_parquet(f'{temp_dir_path}/*.parquet', cache=False).sink_parquet(
